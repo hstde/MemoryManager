@@ -90,7 +90,9 @@ public static class Program
         Console.WriteLine("allocated bytes: " + heap.AllocatedBytes);
         Console.WriteLine("free bytes: " + heap.FreeBytes);
 
-        //heap.Deallocate(ptr);
+        int freed = heap.Deallocate(ptr);
+        Console.WriteLine($"freed {freed} bytes");
+
 
         Console.WriteLine("allocated bytes: " + heap.AllocatedBytes);
         Console.WriteLine("free bytes: " + heap.FreeBytes);

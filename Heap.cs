@@ -84,10 +84,10 @@ public struct Heap
         return ptr;
     }
 
-    public void Deallocate(MemoryPointer ptr)
+    public int Deallocate(MemoryPointer ptr)
     {
         if (ptr.IsNullPtr)
-            return;
+            return 0;
 
         var a = GetHeader(ptr);
 
@@ -97,6 +97,7 @@ public struct Heap
         bitmap.SetRange(start, a.AllocationSizeInChunks, false);
 
         allocatedChunks -= a.AllocationSizeInChunks;
+        return a.AllocationSizeInChunks * CHUNKSIZE;
     }
     
     public bool Contains(MemoryPointer ptr)
