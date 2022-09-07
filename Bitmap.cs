@@ -1,4 +1,6 @@
 using System;
+using SizeT = System.UInt32;
+//using SizeT = System.UInt64;
 
 namespace Program;
 
@@ -77,9 +79,9 @@ public struct Bitmap
             return null;
         }
 
-        int bitSize = 8 * sizeof(ulong);
+        int bitSize = 8 * sizeof(SizeT);
 
-        var bitmap = new MemoryPointer<ulong>(data);
+        var bitmap = new MemoryPointer<SizeT>(data);
 
         // Calculating the start offset.
         int startBucketIndex = from / bitSize;
@@ -90,7 +92,7 @@ public struct Bitmap
 
         for (int bucketIndex = startBucketIndex; bucketIndex < size / bitSize; ++bucketIndex) {
             var bucket = bitmap.AddOffset(bucketIndex).Get();
-            if (bucket == ulong.MaxValue) {
+            if (bucket == SizeT.MaxValue) {
                 // Skip over completely full bucket of size bit_size.
                 if (freeChunks >= minLength) {
                     return Math.Min(freeChunks, maxLength);
@@ -172,14 +174,14 @@ public struct Bitmap
         return 0 != (data.AddOffset(index / 8).GetUInt8() & (1u << (index % 8)));
     }
 
-    private int CountTrailingZeroes(ulong value)
+    private int CountTrailingZeroes(SizeT value)
     {
-        for (int i = 0; i < 8 * sizeof(ulong); ++i) {
+        for (int i = 0; i < 8 * sizeof(SizeT); ++i) {
             if (((value >> i) & 1) == 1) {
                 return i;
             }
         }
-        return 8 * sizeof(ulong);
+        return 8 * sizeof(SizeT);
     }
 
     public void SetRange(int start, int len, bool value)
